@@ -1,0 +1,46 @@
+{
+  "service": "visual-difference",
+  "provider": {
+    "name": "aws",
+    "runtime": "nodejs10.x",
+    "stage": "prod",
+    "region": "us-east-2",
+    "environment": {
+      "variable1": "value1"
+    },
+    "exclude": [
+      "test/**",
+      ".git/**",
+      ".env.example",
+      ".env",
+      ".create-probot-app",
+      ".create-probot-app.cmd",
+      "LICENSE",
+      "README.md",
+      "travis.yml",
+      "CODE_OF_CONDUCT.md",
+      "CONTRIBUTING.md",
+      "app.yml"
+    ]
+  },
+  "functions": {
+    "probot": {
+      "handler": "handler.probot",
+      "timeout": 30,
+      "events": [
+        {
+          "http": {
+            "path": "/",
+            "method": "any"
+          }
+        },
+        {
+          "http": {
+            "path": "/{any+}",
+            "method": "any"
+          }
+        }
+      ]
+    }
+  }
+}
