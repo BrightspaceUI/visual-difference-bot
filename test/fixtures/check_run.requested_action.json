@@ -1,0 +1,100 @@
+{
+  "action": "requested_action",
+  "check_run": {
+    "id": 42,
+    "node_id": "",
+    "head_sha": "46717546ced2b5e1cd2d769739857892b8b93f6d",
+    "external_id": "129502504",
+    "url": "https://api.github.com/repos/BrightspaceHypermediaComponents/activities/check-runs/239259178",
+    "html_url": "https://github.com/BrightspaceHypermediaComponents/activities/runs/239259178",
+    "details_url": "https://travis-ci.com/BrightspaceHypermediaComponents/activities/builds/129502504",
+    "status": "completed",
+    "conclusion": "failure",
+    "started_at": "2019-09-27T19:29:40Z",
+    "completed_at": "2020-09-27T19:29:40Z",
+    "output": {
+      "title": "Visual Difference Tests",
+      "summary": "Visual difference tests failed.",
+      "text": null,
+      "annotations_count": 0,
+      "annotations_url": "https://api.github.com/repos/BrightspaceHypermediaComponents/activities/check-runs/239296039/annotations"
+    },
+    "name": "Visual Difference Tests",
+    "check_suite": {
+      "id": 42,
+      "node_id": "",
+      "head_branch": "branch",
+      "head_sha": "46717546ced2b5e1cd2d769739857892b8b93f6d",
+      "status": "queued",
+      "conclusion": null,
+      "url": "https://api.github.com/repos/BrightspaceHypermediaComponents/activities/check-suites/242225252",
+      "before": "4cc87d2647aaac127b74a6da7c15433fa9c70173",
+      "after": "46717546ced2b5e1cd2d769739857892b8b93f6d",
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/BrightspaceHypermediaComponents/activities/pulls/352",
+          "id": 317309783,
+          "number": 352,
+          "head": {
+            "ref": "branch",
+            "sha": "46717546ced2b5e1cd2d769739857892b8b93f6d",
+            "repo": {
+              "id": 153316014,
+              "url": "https://api.github.com/repos/BrightspaceHypermediaComponents/activities",
+              "name": "activities"
+            }
+          },
+          "base": {
+            "ref": "master",
+            "sha": "a648f2cef34cfa61435a665b3ecbdf6d92a638f3",
+            "repo": {
+              "id": 153316014,
+              "url": "https://api.github.com/repos/BrightspaceHypermediaComponents/activities",
+              "name": "activities"
+            }
+          }
+        }
+      ],
+      "created_at": "2019-09-27T19:29:37Z",
+      "updated_at": "2019-09-27T19:29:37Z"
+    },
+    "pull_requests": [
+      {
+        "url": "https://api.github.com/repos/BrightspaceHypermediaComponents/activities/pulls/352",
+        "id": 42,
+        "number": 352,
+        "head": {
+          "ref": "branch",
+          "sha": "46717546ced2b5e1cd2d769739857892b8b93f6d",
+          "repo": {
+            "id": 153316014,
+            "url": "https://api.github.com/repos/BrightspaceHypermediaComponents/activities",
+            "name": "activities"
+          }
+        },
+        "base": {
+          "ref": "master",
+          "sha": "a648f2cef34cfa61435a665b3ecbdf6d92a638f3",
+          "repo": {
+            "id": 42,
+            "url": "https://api.github.com/repos/BrightspaceHypermediaComponents/activities",
+            "name": "activities"
+          }
+        }
+      }
+    ]
+  },
+  "repository": {
+    "name": "activities",
+    "owner": {
+      "login": "BrightspaceHypermediaComponents"
+    },
+    "url": "https://api.github.com/repos/BrightspaceHypermediaComponents/activities"
+  },
+  "organization": {
+    "login": "BrightspaceHypermediaComponents"
+  },
+  "requested_action": {
+    "identifier": "m"
+  }
+}

@@ -3,13 +3,14 @@
   "issue": {
     "number": 1,
     "user": {
-      "login": "hiimbex"
+      "login": "test_user"
     }
   },
   "repository": {
-    "name": "testing-things",
+    "name": "activities",
     "owner": {
-      "login": "hiimbex"
-    }
+      "login": "BrightspaceHypermediaComponents"
+    },
+    "url": "https://api.github.com/repos/BrightspaceHypermediaComponents/activities"
   }
 }
