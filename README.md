@@ -73,7 +73,7 @@ jobs:
     script:
     - npm run lint
     - do-some-other-tests
-  - stage: visual-difference-tests
+  - stage: Visual-difference-tests
     script:
     - |
       if [ $TRAVIS_SECURE_ENV_VARS == true ]; then
