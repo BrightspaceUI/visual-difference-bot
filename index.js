@@ -318,7 +318,7 @@ async function regenGoldens (context, branchName) {
       config: {
         merge_mode: 'merge',
         install: [
-          'npm ci'
+          'npm install'
         ],
         jobs: {
           include: [{
