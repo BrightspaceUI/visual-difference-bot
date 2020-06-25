@@ -1,6 +1,6 @@
 {
   "name": "visual-difference-bot",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "A GitHub App built with Probot that comments on PRs when visual difference checks fail.",
   "author": "D2L Corporation",
   "license": "Apache License 2.0",
