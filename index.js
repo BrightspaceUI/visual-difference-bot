@@ -329,7 +329,7 @@ async function regenGoldens (context, branchName) {
           }]
         }
       },
-      branch: {
+      branches: {
         only: branchName
       },
       message: `[#${issueNum}] Regenerating the Goldens from "${branchName}"`
