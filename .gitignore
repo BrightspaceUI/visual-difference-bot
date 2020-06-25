@@ -9,7 +9,3 @@ jspm_packages
 
 # Serverless directories
 .serverless
-
-package-lock.json
-
-serverless.yml
