@@ -1,6 +1,6 @@
 {
   "name": "visual-difference-bot",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "description": "A GitHub App built with Probot that comments on PRs when visual difference checks fail.",
   "author": "D2L Corporation",
   "license": "Apache License 2.0",
@@ -17,8 +17,7 @@
     "start": "probot run ./index.js",
     "lint": "standard --fix",
     "test": "jest && standard",
-    "test:watch": "jest --watch --notify --notifyMode=change --coverage",
-    "deploy": "serverless deploy"
+    "test:watch": "jest --watch --notify --notifyMode=change --coverage"
   },
   "dependencies": {
     "@probot/serverless-lambda": "^0.3.0",

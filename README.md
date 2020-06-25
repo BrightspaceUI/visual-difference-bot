@@ -117,30 +117,22 @@ after_success:
 
 ## Serverless Deployment to AWS Lambda
 
-1. Ensure that you have Python 3.7.X installed on your system.
-2. Ensure that you have created a [.env file](README.md/#secrets-management).
+**NOTE:** This repo will automatically redeploy the bot upon merging to master!
+
+1. Ensure that you have created a [.env file](README.md/#secrets-management).
 
 ```sh
 # Install serverless.
 npm install -g serverless
 
-# Install the python3 deploy script dependencies.
-pip3 install -r requirements.txt
+# Deploy
+serverless deploy
 
-# To deploy a new stack to AWS/update the existing one (Requires your AWS credentials to be set).
-python3 deploy.py
-
-# Remove the existing stack from AWS.
-python3 deploy.py --remove-stack
-
-# Spy on the CloudWatch logs as they come in (for debugging purposes).
-# Output the serverless template and quit (dry mode).
-python3 deploy.py -d
 # View the logs
 serverless logs -f probot -t
 ```
 
-3. Be sure to update the **Webhook URL** in the **application settings on GitHub** to be the URL of the API Gateway for the Lambda function.
+2. Be sure to update the **Webhook URL** in the **application settings on GitHub** to be the URL of the API Gateway for the Lambda function.
 
 # Utilizing the Deployed Bot for your existing Brightspace Repo
 

@@ -1,5 +1,4 @@
 // index.js
-// Constants
 const CHECK_RUN_NAME = 'Visual Difference Tests'
 const VD_TEST_MSG = 'Stage 2: Visual-difference-tests'
 const VD_TEST_FAILURE = '### Stage 2: Visual-difference-tests\nThis stage **failed**'
@@ -12,19 +11,15 @@ const TRAVIS_BUILDS_PATH = '/builds/'
 const TRAVIS_PR_BUILD = 'Travis CI - Pull Request'
 const TRAVIS_BR_BUILD = 'Travis CI - Branch'
 
-// Statuses
 const QUEUED = 'queued'
 const COMPLETED = 'completed'
 const IN_PROG = 'in_progress'
 
-// Conclusions
 const FAILURE = 'failure'
 const SUCCESS = 'success'
 const CANCELLED = 'cancelled'
 
 const REGEN_CMD = 'r'
-// const MASTER_CMD = 'm'
-
 const LEAVE_COMMENTS = false
 
 /*
@@ -34,28 +29,24 @@ const LEAVE_COMMENTS = false
  */
 const MAKE_GOLDENS = 'npm run test:diff:golden && npm run test:diff:golden:commit'
 const REGEN_NPM_CMD = `npm run build && ${MAKE_GOLDENS} || ${MAKE_GOLDENS}`
+const PASS = `echo "Skipping...";`
 
 const INFO_PREFIX = '[INFO] '
 const ERROR_PREFIX = '[ERROR] '
-// const DEFAULT_BRANCH = 'master'
 
-// Global Variables
 var repoPath = ''
 var repoPathTravis = ''
 
-// Imports
 const got = require('got')
 
 /**
  * @param {import('probot').Application} app
  */
 module.exports = app => {
-  // Update our stored information anytime there is an event.
   app.on('*', async context => {
     console.log(`${INFO_PREFIX}Updated global information from GitHub event.`)
     await updateGlobals(context)
   })
-  // On a check run event perform some actions.
   app.on('check_run', async context => {
     // If it's a travis PR build, create/update a Visual Difference check run.
     if (context.payload.check_run.name === TRAVIS_PR_BUILD) {
@@ -87,33 +78,21 @@ module.exports = app => {
       }
     }
   })
-  // When the user requests an action on a failed check run.
   app.on('check_run.requested_action', async context => {
-    // Are we regenerating the Goldens from the current branch?
     if (context.payload.requested_action.identifier === REGEN_CMD) {
-      // First we need to get the issue number for this PR
       const issueNum = await getIssueNumFromCRAction(context)
-      // Then we need to get the branch name
       const branch = await getBranchFromPR(context, issueNum)
       await regenGoldens(context, branch)
     }
-    // Are we regenerating the Goldens from the master branch?
-    // if (context.payload.requested_action.identifier === MASTER_CMD) {
-    //   await regenGoldens(context, DEFAULT_BRANCH)
-    // }
   })
-
-  // If the user clicks the 'Re-run' button on a failed check-run.
   app.on('check_run.rerequested', async context => {
     const issueNum = await getIssueNumFromCRAction(context)
     await reRunBuild(context, issueNum)
   })
 }
 
-// Timer function
 const timer = ms => new Promise(resolve => setTimeout(resolve, ms))
 
-// Update our global variables
 async function updateGlobals (context) {
   repoPath = context.payload.repository.url.split(GITHUB_API_BASE)[1]
   repoPathTravis = repoPath.replace('/repos', '/repo')
@@ -121,27 +100,22 @@ async function updateGlobals (context) {
   repoPathTravis = repoPathTravis.replace(regex, '%2F')
 }
 
-// Does this check run have a visual difference test?
 async function hasVisualDiffTest (context) {
   return context.payload.check_run.output.text.includes(VD_TEST_MSG)
 }
 
-// Did the visual difference tests fail for this check run?
 async function confirmVDFailure (context) {
   return context.payload.check_run.output.text.includes(VD_TEST_FAILURE)
 }
 
-// Did the visual difference tests get cancelled this check run?
 async function confirmVDCancel (context) {
   return context.payload.check_run.output.text.includes(VD_TEST_CANCEL)
 }
 
-// Did the visual difference tests pass this check run?
 async function confirmVDPass (context) {
   return context.payload.check_run.output.text.includes(VD_TEST_PASS)
 }
 
-// Creates an in-progress VD check run.
 async function createInProgressCR (context) {
   const params = context.issue({
     name: CHECK_RUN_NAME,
@@ -156,11 +130,9 @@ async function createInProgressCR (context) {
   })
 
   console.log(`${INFO_PREFIX}Visual difference tests are in progress.`)
-
   return context.github.checks.create(params)
 }
 
-// Creates a completed VD check run.
 async function markCRComplete (context) {
   const params = context.issue({
     name: CHECK_RUN_NAME,
@@ -177,11 +149,9 @@ async function markCRComplete (context) {
   })
 
   console.log(`${INFO_PREFIX}Visual difference tests passed.`)
-
   return context.github.checks.create(params)
 }
 
-// Creates a completed VD check run.
 async function markCRCancelled (context) {
   const params = context.issue({
     name: CHECK_RUN_NAME,
@@ -194,13 +164,7 @@ async function markCRCancelled (context) {
       label: 'Regenerate Goldens',
       description: 'Regenerate the Goldens from this branch.',
       identifier: REGEN_CMD
-    }
-      // {
-      //   label: 'Reset Goldens',
-      //   description: 'Reset Goldens to the master branch.',
-      //   identifier: MASTER_CMD
-      // }
-    ],
+    }],
     output: {
       title: CHECK_RUN_NAME,
       summary: 'Visual difference tests were cancelled.'
@@ -209,11 +173,9 @@ async function markCRCancelled (context) {
   })
 
   console.log(`${INFO_PREFIX}Visual difference tests were cancelled.`)
-
   return context.github.checks.create(params)
 }
 
-// Creates a failed VD check run.
 async function markCRFailed (context) {
   await makeCommentFailure(context)
 
@@ -228,13 +190,7 @@ async function markCRFailed (context) {
       label: 'Regenerate Goldens',
       description: 'Regenerate the Goldens from this branch.',
       identifier: REGEN_CMD
-    }
-      // {
-      //   label: 'Reset Goldens',
-      //   description: 'Reset Goldens to the master branch.',
-      //   identifier: MASTER_CMD
-      // }
-    ],
+    }],
     output: {
       title: CHECK_RUN_NAME,
       summary: 'Visual difference tests failed.'
@@ -243,13 +199,10 @@ async function markCRFailed (context) {
   })
 
   console.log(`${INFO_PREFIX}Visual difference tests failed.`)
-
   return context.github.checks.create(params)
 }
 
-// Leaves a comment on a failed PR.
 async function makeCommentFailure (context) {
-  // Extract the URL and issueNum from the CR.
   const URL = context.payload.check_run.details_url
   const issueNum = await getIssueNumFromCR(context)
 
@@ -264,13 +217,10 @@ async function makeCommentFailure (context) {
 
   if (LEAVE_COMMENTS) {
     console.log(`${INFO_PREFIX}Leaving a comment on the PR due to a failed visual difference test.`)
-
-    // Post a comment on the PR
     return context.github.issues.createComment(params)
   }
 }
 
-// Gets the issue number associated with a CR.
 async function getIssueNumFromCR (context) {
   let issueNum = 0
 
@@ -284,7 +234,6 @@ async function getIssueNumFromCR (context) {
   return issueNum
 }
 
-// Gets the issue number associated with a CR Action
 async function getIssueNumFromCRAction (context) {
   let issueNum = 0
 
@@ -296,7 +245,6 @@ async function getIssueNumFromCRAction (context) {
   return issueNum
 }
 
-// Gets the branch name of the pull associated with a check run event
 async function getBranchFromPR (context, issueNum) {
   const params = context.issue({
     pull_number: issueNum,
@@ -307,36 +255,53 @@ async function getBranchFromPR (context, issueNum) {
   return prInfo.data.head.ref
 }
 
-// Regenerates the Goldens, given the branch name
 async function regenGoldens (context, branchName) {
-  // First we need to get the issue number for this CR action
   const issueNum = await getIssueNumFromCRAction(context)
 
   // Custom build data to send to Travis
   const data = JSON.stringify({
     request: {
+      merge_mode: 'deep_merge',
       config: {
-        merge_mode: 'merge',
         install: [
           'npm install'
         ],
+        // We include many jobs as to override the existing jobs in the configuration
         jobs: {
           include: [{
-            stage: 'regen-goldens',
+            stage: 'Code-tests',
+            script: [
+              PASS
+            ]
+          },
+          {
+            stage: 'Visual-difference-tests',
+            script: [
+              PASS
+            ]
+          },
+          {
+            stage: 'Regen-goldens',
             script: [
               REGEN_NPM_CMD
             ]
+          },
+          {
+            stage: 'Update-version',
+            script: [
+              PASS
+            ]
           }]
+        },
+        branches: {
+          only: branchName
         }
       },
-      branch: {
-        only: branchName
-      },
+      branch: branchName,
       message: `[#${issueNum}] Regenerating the Goldens from "${branchName}"`
     }
   })
 
-  // Ask Travis to regenerate the Goldens
   try {
     const response = await got.post(
       `${repoPathTravis}/requests`, {
@@ -365,9 +330,7 @@ async function regenGoldens (context, branchName) {
   }
 }
 
-// Leave a comment on the PR about the regeneration
 async function makeCommentRegen (context, issueNum, branchName, reqID) {
-  // Ask Travis to re-run the Visual Difference tests
   try {
     const response = await got(
       `${repoPathTravis}/request/${reqID}`, {
@@ -405,7 +368,6 @@ async function makeCommentRegen (context, issueNum, branchName, reqID) {
 
       await reRunBuild(context, issueNum)
 
-      // Post a comment on the PR
       if (LEAVE_COMMENTS) {
         return context.github.issues.createComment(params)
       }
@@ -415,9 +377,7 @@ async function makeCommentRegen (context, issueNum, branchName, reqID) {
   }
 }
 
-// Re-run the Travis Builds
 async function reRunBuild (context, issueNum) {
-  // Get the SHA commit for this PR from the issue number
   const prParams = context.issue({
     pull_number: issueNum,
     number: issueNum
@@ -449,9 +409,7 @@ async function reRunBuild (context, issueNum) {
   await contactTravisReRun(buildIDBranch)
 }
 
-// Re-run a specific Travis build
 async function contactTravisReRun (buildID) {
-  // Now tell Travis to restart that build
   try {
     const response = await got.post(
       `/build/${buildID}/restart`, {
