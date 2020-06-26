@@ -316,7 +316,7 @@ async function regenGoldens (context, branchName) {
   const data = JSON.stringify({
     request: {
       config: {
-        merge_mode: 'merge',
+        merge_mode: 'deep_merge',
         install: [
           'npm install'
         ],
