@@ -316,7 +316,7 @@ async function regenGoldens (context, branchName) {
   const data = JSON.stringify({
     request: {
       config: {
-        merge_mode: 'deep_merge',
+        merge_mode: 'merge',
         install: [
           'npm install'
         ],
@@ -327,11 +327,12 @@ async function regenGoldens (context, branchName) {
               REGEN_NPM_CMD
             ]
           }]
+        },
+        branches: {
+          only: branchName
         }
       },
-      branches: {
-        only: branchName
-      },
+      branch: branchName,
       message: `[#${issueNum}] Regenerating the Goldens from "${branchName}"`
     }
   })
