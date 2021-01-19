@@ -1,3 +1,5 @@
+> Deprecated. Use the [visual-diff GitHub Action](https://github.com/BrightspaceUI/actions/tree/master/visual-diff) instead.
+
 # visual-difference-bot
 
 [![Build Status](https://travis-ci.com/BrightspaceUI/visual-difference-bot.svg?branch=master)](https://travis-ci.com/BrightspaceUI/visual-difference-bot)
